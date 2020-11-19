@@ -2,9 +2,9 @@ class DrumKit {
   constructor() {
     this.pads = document.querySelectorAll(".pad");
     this.playBtn = document.querySelector(".play");
-    this.currentKick = "allSounds/kick-classic.wav";
-    this.currentSnare = "allSounds/snare-acoustic01.wav";
-    this.currentHihat = "allSounds/hihat-acoustic01.wav";
+    this.currentKick = "./sounds/kick-classic.wav";
+    this.currentSnare = "./sounds/snare-acoustic01.wav";
+    this.currentHihat = "./sounds/hihat.acoustic01.wav";
     this.kickAudio = document.querySelector(".kick-sound");
     this.snareAudio = document.querySelector(".snare-sound");
     this.hihatAudio = document.querySelector(".hihat-sound");
@@ -24,9 +24,7 @@ class DrumKit {
     //Loop over the pads
     activeBars.forEach((bar) => {
       bar.style.animation = `playTrack 0.3s alternate ease-in-out 2`;
-      //Check if pads are active
       if (bar.classList.contains("active")) {
-        //Check each sound
         if (bar.classList.contains("kick-pad")) {
           this.kickAudio.currentTime = 0;
           this.kickAudio.play();
@@ -46,9 +44,11 @@ class DrumKit {
   start() {
     const interval = (60 / this.bpm) * 1000;
     //Check if it's playing
+
     if (this.isPlaying) {
       //Clear the interval
       clearInterval(this.isPlaying);
+      console.log(this.isPlaying);
       this.isPlaying = null;
     } else {
       this.isPlaying = setInterval(() => {
@@ -57,7 +57,8 @@ class DrumKit {
     }
   }
   updateBtn() {
-    //NUll check the reverse of it
+    //NULL
+
     if (!this.isPlaying) {
       this.playBtn.innerText = "Stop";
       this.playBtn.classList.add("active");
@@ -129,7 +130,6 @@ const drumKit = new DrumKit();
 
 //Event Listeners
 
-//Animates each pad when you click on them
 drumKit.pads.forEach((pad) => {
   pad.addEventListener("click", drumKit.activePad);
   pad.addEventListener("animationend", function () {
@@ -137,27 +137,22 @@ drumKit.pads.forEach((pad) => {
   });
 });
 
-//Updates play button and starts and stops the samples
-drumKit.playBtn.addEventListener("click", () => {
+drumKit.playBtn.addEventListener("click", function () {
   drumKit.updateBtn();
   drumKit.start();
 });
 
-//Allows user to change sample sounds
 drumKit.selects.forEach((select) => {
   select.addEventListener("change", function (e) {
     drumKit.changeSound(e);
   });
 });
-
-//Mutes selected track
 drumKit.muteBtns.forEach((btn) => {
   btn.addEventListener("click", function (e) {
     drumKit.mute(e);
   });
 });
 
-//Allows user to update tempo
 drumKit.tempoSlider.addEventListener("input", function (e) {
   drumKit.changeTempo(e);
 });
